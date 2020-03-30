@@ -1,0 +1,56 @@
+                                        					<thead>
+                                        						<tr>
+                                        							<th class="detail-col">序号</th>
+                                        							<th class="hidden-480">显示序号</th>
+                                        							<th class="hidden-480">新闻分类类型</th>
+                                        							<th class="hidden-480">名称</th>
+                                        							<th class="hidden-480">图片宽度</th>
+                                        							<th class="hidden-480">图片宽度</th>
+                                        							<th>
+                                        								<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                                        								最后修改时间
+                                        							</th>
+                                        							<th class="hidden-480">添加人</th>
+                                        							<th>操作</th>
+                                        						</tr>
+                                        					</thead>
+
+                                        					<tbody>
+                                                                {{-- 循环模型（数据库）中数据 --}}
+                                                                <?php $i = 0?>
+                                                                @foreach($pic_type as $v)
+                                                                <?php $i++?>
+                                        						<tr>
+                                        							<td>{{$i}}</td>
+                                        							<td class="hidden-480">{{$v->show_order}}</td>
+                                        							<td class="hidden-480">
+                                                                    @if($v->type==1)
+                                                                        单图片
+                                                                        @else 多图片
+                                                                    @endif
+                                                                    </td>
+                                        							<td>{{$v->name}}</td>
+                                        							<td>{{$v->width}}</td>
+                                        							<td>{{$v->height}}</td>
+                                        							<td>{{$v->updated_at}}</td>
+
+                                        							<td class="hidden-480">
+                                        								<span class="label label-sm label-warning">{{$v->add_user}}</span>
+                                        							</td>
+
+                                        							<td>
+                                        								<div class="hidden-sm hidden-xs btn-group">
+                                                                            <form style="float: left; margin-left: 2px;" action="{{url('admin/pic_type/edit',['id'=>$v->id])}}" method= "get">
+                                                                                <input class="btn btn-xs btn-info" type="submit" value="编辑" />
+                                                                            </form>
+                                                                            <form style="float: right;margin-left: 2px;" action="{{url('admin/pic_type',['id'=>$v->id])}}" method= "post">
+                                                                                <input class="btn btn-xs btn-danger" onclick="return del()" type="submit" value="删除" />
+                                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                                <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                                                                            </form>
+                                        								</div>
+                                        							</td>
+
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
