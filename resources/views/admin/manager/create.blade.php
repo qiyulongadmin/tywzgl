@@ -5,7 +5,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>普通网站管理系统</title>
-        {{--<meta name="csrf-token" content="{{ csrf_token() }}">--}}
 		<meta name="description" content="overview &amp; stats" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -281,7 +280,7 @@
             //键盘离开时
             $('#password').keyup(function() {
                 //密码为八位及以上并且字母数字特殊字符三项都包括
-                var strongRegex = new RegExp("^(?=.{6,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+                var strongRegex = new RegExp("^(?=.{6,})((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W))|((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$", "g");
                 //密码为七位及以上并且字母、数字、特殊字符三项中有两项，强度是中等
                 var mediumRegex = new RegExp("^(?=.{6,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
                 //密码为六位及及以上，只含有一种，强度为弱
