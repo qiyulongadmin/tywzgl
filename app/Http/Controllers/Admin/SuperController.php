@@ -89,31 +89,52 @@ class SuperController extends Controller
     {
         //1.接收前台表单提交的数据
         $input =$request->all();
-        $info = $input['Manage'];
-
-        //2.进行表单验证
-
-        //3.添加到数据库的manager表
-        $name=$info['name'];
-        $real_name=$info['real_name'];
-        $password=$info['password'];
-        $remark=$info['remark'];
-        $created_at = date("Y-m-d H:i:s");
-        $res = Manage::create([
-            'name'=>$name,
-            'real_name'=>$real_name,
-            'password'=>$password,
-            'remark'=>$remark,
-            'add_user'=>session('super')['name'],
-            'created_at'=>$created_at,
-            ]);
-
-        //4.根据是否添加成功，给用户反馈
-        if($res){
-            return \redirect()->back()->with('success','恭喜，添加成功！');
+        //判断是ajax提交还是from提交(依据数组里是否含有ajax键)
+        if(isset($input['ajax'])){
+            $res = Manage::where('name',$input['name'])->first();
+            if(!$res){
+                $data = [
+                    'status' => 0,
+                    'newclass' => "help-block col-xs-12 col-sm-reset inline green",
+                    'cont' => "(用户名可用)",
+                ];
+            }else{
+                $data = [
+                    'status' => 1,
+                    'newclass' => "help-block col-xs-12 col-sm-reset inline red",
+                    'cont' => "(用户名已存在)",
+                ];
+            }
+            return $data;
         }else{
-            return \redirect()->back()->with('errors','抱歉，添加失败！');
+            $info = $input['Manage'];
+
+            //2.进行表单验证
+
+            //3.添加到数据库的manager表
+            $name=$info['name'];
+            $real_name=$info['real_name'];
+            $password=$info['password'];
+            $remark=$info['remark'];
+            $created_at = date("Y-m-d H:i:s");
+            $res = Manage::create([
+                'name'=>$name,
+                'real_name'=>$real_name,
+                'password'=>$password,
+                'remark'=>$remark,
+                'add_user'=>session('super')['name'],
+                'created_at'=>$created_at,
+                ]);
+
+            //4.根据是否添加成功，给用户反馈
+            if($res){
+                return \redirect()->back()->with('success','恭喜，添加成功！');
+            }else{
+                return \redirect()->back()->with('errors','抱歉，添加失败！');
+            }
         }
+
+
     }
 
     /**
