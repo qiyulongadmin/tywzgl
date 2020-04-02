@@ -195,7 +195,7 @@
             var oldname = "{{$manage->name}}";
             var oldxiaoxi1;
             var oldclass1;
-            //键盘离开时显示，内含失去焦点显示键盘离开后样式及内容
+            //键盘离开时显示，内含失去焦点显示键盘离开后样式及内容.
             $("#name").keyup(function() {
                 var name = $(" #name ").val();
                 if(name===''){
