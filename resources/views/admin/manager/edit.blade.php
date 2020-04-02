@@ -5,9 +5,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
 		<title>普通网站管理系统</title>
-        {{--<meta name="csrf-token" content="{{ csrf_token() }}">--}}
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @include('admin.public.style')
     </head>
 
@@ -81,7 +81,7 @@
                                                                         <i class="icon-leaf"></i>
                                                                     </span>
                                                                 </div>
-                                                                <div class="help-block col-xs-12 col-sm-reset inline red">
+                                                                <div id="xiaoxi" class="help-block col-xs-12 col-sm-reset inline red">
                                                                     *(必填)
                                                                 </div>
                                                             </div>
@@ -107,7 +107,7 @@
                                                                         <i class="icon-leaf"></i>
                                                                     </span>
                                                                 </div>
-                                                                <div class="help-block col-xs-12 col-sm-reset inline red">
+                                                                <div id="password_id" class="help-block col-xs-12 col-sm-reset inline red">
                                                                     *(必填)
                                                                 </div>
                                                             </div>
@@ -172,27 +172,167 @@
             @include('admin.public.footer')
 		</div>
         @include('admin/public/script')
-        {{--<script>
-            //监听提交
-            from.on('subit(add)',function(date)){
-                //发起异步，把数据提交给php
+        <script>
+            //一、对姓名进行验证
+            var oldxiaoxi;
+            var oldclass;
+            //姓名获取焦点时显示，内含失去焦点显示点击前样式及内容
+            $("#name").focus(function() {
+                oldxiaoxi = $("#xiaoxi").text();
+                oldclass = $("#xiaoxi").attr("class");
+                //修改css样式为黑色
+                $("#xiaoxi").attr("class","help-block col-xs-12 col-sm-reset inline");
+                //修改HTML内容
+                $("#xiaoxi").html("(正在输入...)");
+                //当点击完输入框不做操作离开时避免显示正在输入，因此显示点击前所显示的内容及样式
+                // $("#name").blur(function() {
+                //     //修改css内容
+                //     $("#xiaoxi").attr("class",oldclass);
+                //     //修改HTML内容
+                //     $("#xiaoxi").html(oldxiaoxi);
+                // });
+            });
+            var oldname = "{{$manage->name}}";
+            var oldxiaoxi1;
+            var oldclass1;
+            //键盘离开时显示，内含失去焦点显示键盘离开后样式及内容
+            $("#name").keyup(function() {
+                var name = $(" #name ").val();
+                if(name===''){
+                    //修改css样式为黑色
+                    $("#xiaoxi").attr("class","help-block col-xs-12 col-sm-reset inline");
+                    //修改HTML内容
+                    $("#xiaoxi").html("(正在输入...)");
+                }else if(name===oldname){
+                    //修改css样式为黑色
+                    $("#xiaoxi").attr("class","help-block col-xs-12 col-sm-reset inline green");
+                    //修改HTML内容
+                    $("#xiaoxi").html("(原用户名)");
+                }else{
+                    //调用ajax
                     $.ajax({
-                        type:'POST',
-                        url:'/admin/manager',
-                        dataType:'json',
-                         headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                        date:data.field,
-                        success:function(data){
-                            //提示添加成功，刷新页面
-                            console.log(data);
-                        },
-                        error:function(){
-                            //错误提示信息
+                        //请求方式
+                       type:"post",
+
+                       //服务器相应数据的解析方式
+                       dataType:"json",
+                       headers: {
+                               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                           },
+                       //请求资源url
+                       url:"/admin/manager",
+                       //此处需要同步处理，即ajax执行完后才能向下进行。（避免第一次点击输入框只有一次键盘触发时oldxiaoxi为（正在输入...））
+                       // async: false,
+                       //向服务器端发送的数据
+                       data:{"name":name,"ajax":'cunzai'},
+                       success:function(data){
+                            $("#xiaoxi").attr("class",data.newclass);
+                            $("#xiaoxi").html(data.cont);
+                            oldxiaoxi1 = $("#xiaoxi").text();
+                            oldclass1 = $("#xiaoxi").attr("class");
                         }
-                    })
-            }
-        </script>--}}
+                    });
+                }
+
+            });
+
+            //失去焦点时的两种情况，1.获取焦点->失去焦点，2.获取焦点->键盘离开->失去焦点（最后一个else之后便是）
+            $("#name").blur(function() {
+                if($(" #name ").val()===''){
+                    //修改css样式为黑色
+                    $("#xiaoxi").attr("class","help-block col-xs-12 col-sm-reset inline red");
+                    //修改HTML内容
+                    $("#xiaoxi").html("*必填");
+                }else{
+                    if(oldxiaoxi1==="(用户名已存在)"){
+                        $("#name").val("");
+                        //修改css内容
+                        $("#xiaoxi").attr("class","help-block col-xs-12 col-sm-reset inline red");
+                        //修改HTML内容
+                        $("#xiaoxi").html("*(必填)");
+                    }else if(oldxiaoxi1==="(用户名可用)"){
+                        // 修改css内容
+                        $("#xiaoxi").attr("class",oldclass1);
+                        //修改HTML内容
+                        $("#xiaoxi").html(oldxiaoxi1);
+                    }else{
+                        //修改css内容
+                        $("#xiaoxi").attr("class",oldclass);
+                        //修改HTML内容
+                        $("#xiaoxi").html(oldxiaoxi);
+                    }
+                }
+            });
+
+
+
+
+
+
+            //二、对密码进行验证
+            var oldpassword_x;
+            var oldpassword_c;
+            //姓名获取焦点时显示，内含失去焦点显示点击前样式及内容
+            $("#password").focus(function() {
+                oldpassword_x = $("#password_id").text();
+                oldpassword_c = $("#password_id").attr("class");
+                //修改css样式为黑色
+                $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline");
+                //修改HTML内容
+                $("#password_id").html("(请输入6-16位数字、字母或常用符号，字母区分大小写)");
+            });
+
+
+            var qiangdu;
+            //键盘离开时
+            $('#password').keyup(function() {
+                //密码为八位及以上并且字母数字特殊字符三项都包括
+                var strongRegex = new RegExp("^(?=.{6,})((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W))|((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$", "g");
+                //密码为七位及以上并且字母、数字、特殊字符三项中有两项，强度是中等
+                var mediumRegex = new RegExp("^(?=.{6,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+                //密码为六位及及以上，只含有一种，强度为弱
+                var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+                if (false == enoughRegex.test($('#password').val())) {
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline");
+                        $("#password_id").html("(请输入6-16位数字、字母或常用符号，字母区分大小写)");
+                        qiangdu = 0;
+                } else if (strongRegex.test($('#password').val())) {
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline green");
+                        $("#password_id").html("(强：您的密码很安全！)");
+                        qiangdu = 1;
+                } else if (mediumRegex.test($('#password').val())) {
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline blue");
+                        $("#password_id").html("(中：您的密码号可以更复杂些！)");
+                        qiangdu = 2;
+                } else {
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline red");
+                        $("#password_id").html("(弱：您输入的密码强度过弱，试试字母、数字、常用符号的组合！)");
+                        qiangdu = 3;
+                }
+                return true;
+           });
+
+            $("#password").blur(function() {
+                    if(qiangdu == 0){
+                        $("#password").val("");
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline red");
+                        $("#password_id").html("*必填");
+                    }else if(qiangdu == 1){
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline green");
+                        $("#password_id").html("(强：您的密码很安全！)");
+                    }else if(qiangdu == 2){
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline blue");
+                        $("#password_id").html("(中：您的密码号可以更复杂些！)");
+                    }else if(qiangdu == 3){
+                        $("#password_id").attr("class","help-block col-xs-12 col-sm-reset inline red");
+                        $("#password_id").html("(弱：您输入的密码强度过弱，试试字母、数字、常用符号的组合！)");
+                    }else{
+                        $("#password_id").attr("class",oldpassword_c);
+                        $("#password_id").html(oldpassword_x);
+                    }
+            });
+
+        </script>
+
 	</body>
 </html>
