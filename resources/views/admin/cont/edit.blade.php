@@ -39,7 +39,7 @@
                     <div class="page-content">
                         {{--选项卡开始--}}
                         <div class="col-sm-6" style="width: 100%;">
-                            <div class="tabbable" >
+                            <div class="tabbable">
                                 {{--选项卡标题--}}
                                 <ul class="nav nav-tabs" id="myTab">
                                     @if($type==0||$type==1||$type==2)
