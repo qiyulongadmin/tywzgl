@@ -42,7 +42,7 @@
                             <div class="tabbable" >
                                 {{--选项卡标题--}}
                                 <ul class="nav nav-tabs" id="myTab">
-                                    @if($type==0&&$type==1&&$type==2)
+                                    @if($type==0||$type==1||$type==2)
                                         <li class="">
                                             <a href="{{url('admin/conts/'.$id.'/conts/'.$id2.'/conts')}}">
                                                 <i class="green ace-icon fa fa-home bigger-120"></i>
@@ -207,8 +207,7 @@
 
                                                                         <div class="col-xs-12 col-sm-8 inline help-block">
                                                                             <span class="block input-icon input-icon-right">
-
-                                                                                <input type="datetime-local" name="conts[time]" value="{{$conts->created_at}}" class="width-100">
+                                                                                <input type="text" class="layui-input" name="conts[time]" value="{{$conts->created_at}}" id="test5" placeholder="yyyy-MM-dd HH:mm:ss" lay-key="6">
                                                                                 <i class="icon-leaf"></i>
 
                                                                             </span>
@@ -221,7 +220,16 @@
                                                                         </div>
                                                                     </div>
                                                                 </form>
+                                                                    <script src="{{asset('admin/assets/laydate/laydate.js')}}"></script> <!-- 改成你的路径 -->
+                                                                     <script>
+                                                                     lay('#version').html('-v'+ laydate.v);
 
+                                                                    //时间选择器
+                                                                    laydate.render({
+                                                                      elem: '#test5'
+                                                                      ,type: 'datetime'
+                                                                    });
+                                                                     </script>
                                                         </div>
                                         			</div><!-- /.span -->
                                         		</div><!-- /.row -->

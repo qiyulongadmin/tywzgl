@@ -67,7 +67,7 @@
 
                                 <div class="bs-bars pull-left">
                                     <div id="toolbar" class="btn-group">
-                                        <a href="{{url('admin/manager/create')}}" style="color:#333">
+                                        <a href="{{url('admin/conts/'.$id.'/conts/'.$id2.'/conts/create')}}" style="color:#333">
                                         <div id="btn_add" class="btn btn-default">
                                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                             新增

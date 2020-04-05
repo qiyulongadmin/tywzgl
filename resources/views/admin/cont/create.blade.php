@@ -8,6 +8,7 @@
     <meta name="description" content="overview &amp; stats" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     @include('admin.public.style')
+    <link rel="stylesheet" href="{{asset('admin/assets/js/layui.css')}}" media="all">
 </head>
 
 <body class="no-skin">
@@ -82,7 +83,7 @@
                                                         <div class="form-group">
                                                             <label for="show_order" class="col-xs-12 col-sm-2 control-label no-padding-right">显示序号</label>
 
-                                                            <div class="col-xs-12 col-sm-8 inline help-block">
+                                                            <div class="col-xs-12 col-sm-1 inline help-block">
                                                                 <span class="block input-icon input-icon-right">
                                                                     <input type="number" name="conts[show_order]"  id="show_order" class="width-100">
                                                                     <i class="icon-leaf"></i>
@@ -201,16 +202,18 @@
                                                         <div class="form-group">
                                                             <label for="time" class="col-xs-12 col-sm-2 control-label no-padding-right">添加时间</label>
 
-                                                            <div class="col-xs-12 col-sm-8 inline help-block">
+                                                            <div class="col-xs-12 col-sm-3 inline help-block">
                                                                 <span class="block input-icon input-icon-right">
                                                                     @if($conts=='A')
                                                                     <input type="hidden" name="edit" value="404">
                                                                     @endif
 																	<input type="hidden" name="edit" value="200">
-                                                                    <input type="datetime-local" name="conts[time]" class="width-100">
+                                                                    <input type="text" class="layui-input" name="conts[time]" id="test5" placeholder="yyyy-MM-dd HH:mm:ss" lay-key="6">
                                                                     <i class="icon-leaf"></i>
                                                                 </span>
                                                             </div>
+                                                           
+
                                                         </div>
 
                                                         <div class="form-group">
@@ -220,6 +223,17 @@
                                                             </div>
                                                         </div>
                                                     </form>
+                                                        <script src="{{asset('admin/assets/laydate/laydate.js')}}"></script> <!-- 改成你的路径 -->
+                                                        <script>
+                                                        lay('#version').html('-v'+ laydate.v);
+
+                                                       //时间选择器
+                                                       laydate.render({
+                                                         elem: '#test5'
+                                                         ,type: 'datetime'
+                                                       });
+                                                        </script>
+
                                                 </div>
                                             </div><!-- /.span -->
                                         </div><!-- /.row -->

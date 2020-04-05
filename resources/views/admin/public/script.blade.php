@@ -28,8 +28,6 @@
         <script src="{{asset('admin/assets/js/ace-elements.min.js')}}"></script>
         <script src="{{asset('admin/assets/js/ace.min.js')}}"></script>
 
-        <script src="http://zx.tu-do.cn/static/super/js/bootstrap.min.js"></script>
-
 
 <script type="text/javascript">
 			jQuery(function($) {
